@@ -1,2 +1,4 @@
-# readify
-AI-powered full-stack reading &amp; learning platform combining personalized reading, AI summaries, community engagement, and author tools. Built with Next.js, Node.js, PostgreSQL, and AI integrations.
+# Readify – Intelligent Reading & Document Platform
+
+A full-stack platform for uploading, managing, and understanding documents with AI-assisted insights and future community & creator features.
+
