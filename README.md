@@ -1,4 +1,8 @@
 # Readify – Intelligent Reading & Document Platform
 
-A full-stack platform for uploading, managing, and understanding documents with AI-assisted insights and future community & creator features.
+Readify is a full-stack platform where users can upload documents or links,
+receive AI-assisted summaries and insights, and manage their personal
+reading dashboard.
 
+The platform is being rebuilt with a modular architecture and
+future-ready features for community interaction and creator content.
