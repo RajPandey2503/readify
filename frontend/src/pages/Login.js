@@ -7,28 +7,33 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    setLoading(true);
+const handleLogin = async () => {
+  setLoading(true);
 
-    fetch("http://localhost:5000/login", {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/Login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email.trim(),
         password: password.trim()
       })
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message);
-        if (data.success) {
-          localStorage.setItem("user", data.user);
-          navigate("/upload");
-        }
-      })
-      .catch(() => alert("Login failed"))
-      .finally(() => setLoading(false));
-  };
+    });
+
+    const data = await res.json();
+
+    alert(data.message || (res.ok ? "Logged in" : "Login failed"));
+    if (res.ok && data.success) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/upload");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div style={{ textAlign: "center", marginTop: "80px" }}>

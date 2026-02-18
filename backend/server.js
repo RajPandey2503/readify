@@ -52,6 +52,12 @@ app.post("/upload", (req, res) => {
 app.get("/history", (req, res) => {
   res.json(uploads);
 });
+// CLEAR HISTORY
+app.delete("/history", (req, res) => {
+  uploads = [];
+  res.json({ message: "History cleared" });
+});
+
 
 app.listen(5000, () => {
   console.log("Server running on http://localhost:5000");

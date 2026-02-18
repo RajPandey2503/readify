@@ -4,12 +4,23 @@ function History() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/history")
+  const fetchHistory = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/History`)
+
       .then(res => res.json())
       .then(data => setItems(data))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchHistory();
   }, []);
+
+  const clearHistory = () => {
+    fetch("http://localhost:5000/history", {
+      method: "DELETE"
+    }).then(() => fetchHistory());
+  };
 
   return (
     <div style={{ textAlign: "center", marginTop: "60px" }}>
@@ -26,6 +37,12 @@ function History() {
           <hr />
         </div>
       ))}
+
+      {items.length > 0 && (
+        <button onClick={clearHistory} style={{ marginTop: "20px" }}>
+          Clear History
+        </button>
+      )}
     </div>
   );
 }

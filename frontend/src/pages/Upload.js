@@ -15,7 +15,8 @@ function Upload() {
     setError("");
     setResult(null);
 
-    fetch("http://localhost:5000/upload", {
+    fetch(`${process.env.REACT_APP_API_URL}/upload`
+, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fileName: file.name })
