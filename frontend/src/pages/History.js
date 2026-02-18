@@ -12,7 +12,7 @@ function History() {
     setError("");
 
     fetch(`${process.env.REACT_APP_API_URL}/history`, {
-      headers: { "Authorization": token }
+      headers: { Authorization: token }
     })
       .then(res => {
         if (!res.ok) throw new Error("Failed");
@@ -27,10 +27,17 @@ function History() {
     fetchHistory();
   }, []);
 
+  const deleteOne = (id) => {
+    fetch(`${process.env.REACT_APP_API_URL}/history/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: token }
+    }).then(fetchHistory);
+  };
+
   const clearHistory = () => {
     fetch(`${process.env.REACT_APP_API_URL}/history`, {
       method: "DELETE",
-      headers: { "Authorization": token }
+      headers: { Authorization: token }
     }).then(fetchHistory);
   };
 
@@ -42,17 +49,27 @@ function History() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && items.length === 0 && <p>No uploads yet.</p>}
 
-      {items.map((item, index) => (
-        <div key={index} style={{ marginTop: "20px" }}>
+      {items.map(item => (
+        <div key={item._id} style={{ marginTop: "20px" }}>
           <p><strong>{item.fileName}</strong></p>
           <p>Type: {item.type}</p>
           <p>Summary: {item.summary}</p>
+
+          <button
+            onClick={() => deleteOne(item._id)}
+            style={{ background: "red", color: "white" }}
+          >
+            Delete This
+          </button>
+
           <hr />
         </div>
       ))}
 
       {items.length > 0 && (
-        <button onClick={clearHistory}>Clear History</button>
+        <button onClick={clearHistory}>
+          Clear All History
+        </button>
       )}
     </div>
   );

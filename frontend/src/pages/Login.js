@@ -30,7 +30,8 @@ function Login() {
       if (res.ok && data.success) {
         localStorage.setItem("token", data.token);
         alert("Login Successful");
-        navigate("/upload");
+        navigate("/dashboard");
+
       } else {
         alert(data.message || "Login failed");
       }

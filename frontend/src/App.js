@@ -5,6 +5,8 @@ import History from "./pages/History";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
+import UrlReader from "./pages/UrlReader";
 
 function App() {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ function App() {
 
   return (
     <div>
+
       {/* ---------- NAVBAR ---------- */}
       <nav style={{ background: "#111", padding: "15px", textAlign: "center" }}>
         <Link to="/" style={{ color: "white", margin: "10px" }}>Home</Link>
@@ -32,6 +35,8 @@ function App() {
             <Link to="/upload" style={{ color: "white", margin: "10px" }}>Upload</Link>
             <Link to="/history" style={{ color: "white", margin: "10px" }}>History</Link>
             <Link to="/profile" style={{ color: "white", margin: "10px" }}>Profile</Link>
+            <Link to="/dashboard" style={{ color: "white", margin: "10px" }}>Dashboard</Link>
+            <Link to="/reader" style={{ color: "white", margin: "10px" }}>Reader</Link>
           </>
         )}
 
@@ -59,6 +64,7 @@ function App() {
 
       {/* ---------- ROUTES ---------- */}
       <Routes>
+
         <Route path="/" element={<Home />} />
 
         <Route
@@ -88,8 +94,27 @@ function App() {
           }
         />
 
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/reader"
+          element={
+            <PrivateRoute>
+              <UrlReader />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
+
       </Routes>
 
       {/* ---------- FOOTER ---------- */}
@@ -104,6 +129,7 @@ function App() {
       >
         <p>Readify © 2026</p>
       </footer>
+
     </div>
   );
 }
