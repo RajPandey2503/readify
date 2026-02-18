@@ -7,33 +7,41 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-const handleLogin = async () => {
-  setLoading(true);
-
-  try {
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/Login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: email.trim(),
-        password: password.trim()
-      })
-    });
-
-    const data = await res.json();
-
-    alert(data.message || (res.ok ? "Logged in" : "Login failed"));
-    if (res.ok && data.success) {
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/upload");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
     }
-  } catch (err) {
-    console.error(err);
-    alert("Login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim()
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        localStorage.setItem("token", data.token);
+        alert("Login Successful");
+        navigate("/upload");
+      } else {
+        alert(data.message || "Login failed");
+      }
+
+    } catch (err) {
+      console.error("Login Error:", err);
+      alert("Server error. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{ textAlign: "center", marginTop: "80px" }}>
@@ -44,6 +52,7 @@ const handleLogin = async () => {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        style={{ padding: "10px", margin: "10px" }}
       />
       <br />
 
@@ -52,10 +61,15 @@ const handleLogin = async () => {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        style={{ padding: "10px", margin: "10px" }}
       />
       <br />
 
-      <button onClick={handleLogin} disabled={loading}>
+      <button
+        onClick={handleLogin}
+        disabled={loading}
+        style={{ padding: "10px 20px", cursor: "pointer" }}
+      >
         {loading ? "Logging in..." : "Login"}
       </button>
     </div>

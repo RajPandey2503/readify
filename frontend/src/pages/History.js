@@ -3,12 +3,23 @@ import { useEffect, useState } from "react";
 function History() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const token = localStorage.getItem("token");
 
   const fetchHistory = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/History`)
+    setLoading(true);
+    setError("");
 
-      .then(res => res.json())
+    fetch(`${process.env.REACT_APP_API_URL}/history`, {
+      headers: { "Authorization": token }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed");
+        return res.json();
+      })
       .then(data => setItems(data))
+      .catch(() => setError("Could not load history"))
       .finally(() => setLoading(false));
   };
 
@@ -17,16 +28,18 @@ function History() {
   }, []);
 
   const clearHistory = () => {
-    fetch("http://localhost:5000/history", {
-      method: "DELETE"
-    }).then(() => fetchHistory());
+    fetch(`${process.env.REACT_APP_API_URL}/history`, {
+      method: "DELETE",
+      headers: { "Authorization": token }
+    }).then(fetchHistory);
   };
 
   return (
     <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Upload History</h1>
 
-      {loading && <p>Loading history...</p>}
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && items.length === 0 && <p>No uploads yet.</p>}
 
       {items.map((item, index) => (
@@ -39,9 +52,7 @@ function History() {
       ))}
 
       {items.length > 0 && (
-        <button onClick={clearHistory} style={{ marginTop: "20px" }}>
-          Clear History
-        </button>
+        <button onClick={clearHistory}>Clear History</button>
       )}
     </div>
   );

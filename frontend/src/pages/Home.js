@@ -6,7 +6,8 @@ function Home() {
   const user = localStorage.getItem("user");
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/Home`)
+    fetch(`${process.env.REACT_APP_API_URL}/history`)
+
 
       .then(res => res.json())
       .then(data => setCount(data.length))

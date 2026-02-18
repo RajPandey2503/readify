@@ -15,13 +15,18 @@ function Upload() {
     setError("");
     setResult(null);
 
-    fetch(`${process.env.REACT_APP_API_URL}/upload`
-, {
+    fetch(`${process.env.REACT_APP_API_URL}/upload`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token")
+      },
       body: JSON.stringify({ fileName: file.name })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Upload failed");
+        return res.json();
+      })
       .then(data => setResult(data))
       .catch(() => setError("Upload failed. Please try again."))
       .finally(() => setLoading(false));
